@@ -59,32 +59,37 @@ export const Workspace: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white dark:bg-[#191919] font-sans">
+    <div className="flex h-screen overflow-hidden bg-notion-bg dark:bg-notion-bgDark font-sans">
       <Sidebar />
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
 
       <main className="flex-1 flex flex-col min-w-0 relative">
         {/* Top Navigation Bar */}
         <div className="h-12 flex items-center justify-between px-3 md:px-4 shrink-0 absolute top-0 left-0 right-0 z-10">
-          <div className="flex items-center space-x-2 text-sm text-gray-500 overflow-hidden">
+          <div className="flex items-center space-x-2 text-sm text-notion-gray dark:text-notion-grayDark overflow-hidden">
             {currentPage && (
-              <div className="flex items-center bg-white/80 dark:bg-[#191919]/80 backdrop-blur-md px-2 py-1 rounded">
-                <span className="truncate max-w-[200px]">{currentPage.icon || <FileText size={14} className="inline mr-1" />} {currentPage.title || 'Untitled'}</span>
+              <div className="flex items-center bg-transparent backdrop-blur-md px-2 py-1 rounded cursor-pointer hover:bg-notion-hover dark:hover:bg-notion-hoverDark transition-colors">
+                <span className="truncate max-w-[200px] flex items-center gap-1.5 font-medium">
+                  {currentPage.icon || <FileText size={16} />} {currentPage.title || 'Untitled'}
+                </span>
               </div>
             )}
           </div>
 
           {currentPage && (
-            <div className="flex items-center space-x-2 bg-white/80 dark:bg-[#191919]/80 backdrop-blur-md rounded px-1">
+            <div className="flex items-center space-x-1 bg-transparent backdrop-blur-md rounded px-1">
               <button
                 onClick={togglePageType}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm text-gray-500 flex items-center text-xs"
+                className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark flex items-center text-sm transition-colors"
                 title={currentPage.isDatabase ? "Switch to Document" : "Switch to Database"}
               >
                 {currentPage.isDatabase ? <FileText size={16} /> : <DatabaseIcon size={16} />}
               </button>
-              <button className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm text-gray-500">
-                <MoreHorizontal size={16} />
+              <button className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark transition-colors text-sm">
+                Share
+              </button>
+              <button className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark transition-colors">
+                <MoreHorizontal size={20} />
               </button>
             </div>
           )}

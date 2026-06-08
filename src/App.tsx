@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Workspace } from './pages/Workspace';
 import { useThemeStore } from './store/useStore';
 import { useEffect } from 'react';
+import "./App.css";
 
 function App() {
   const { theme } = useThemeStore();

@@ -16,8 +16,8 @@
 
 /* Custom scrollbar to match Notion */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -27,13 +27,13 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(15, 15, 15, 0.1);
   border-radius: 10px;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(15, 15, 15, 0.2);
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   background-clip: padding-box;
 }
 
@@ -51,11 +51,11 @@
 }
 /* Selection */
 ::selection {
-  background: rgba(46, 170, 220, 0.4);
+  background: rgba(35, 131, 226, 0.28);
 }
 
 .dark ::selection {
-  background: rgba(46, 170, 220, 0.4);
+  background: rgba(35, 131, 226, 0.4);
 }
 
 /* Notion-like Placeholder */

@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { ChevronRight, ChevronDown, Plus, FileText, Trash2, Settings, Search, Menu } from 'lucide-react';
-import { useWorkspaceStore } from '../store/useStore';
+import React, { useState, useMemo, useEffect } from 'react';
+import { ChevronRight, ChevronDown, Plus, FileText, Trash2, Settings, Search, Menu, Moon, Sun, Monitor } from 'lucide-react';
+import { useWorkspaceStore, useThemeStore } from '../store/useStore';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { PageMeta } from '../types';
@@ -20,7 +20,7 @@ const PageItem: React.FC<PageItemProps> = ({ page, level = 0 }) => {
 
   const childPages = useMemo(() => {
     return Object.values(pages)
-      .filter((p) => p.parentId === page.id)
+      .filter((p) => p.parentId === page.id && !p.isDeleted)
       .sort((a, b) => a.createdAt - b.createdAt);
   }, [pages, page.id]);
 
@@ -114,15 +114,59 @@ const PageItem: React.FC<PageItemProps> = ({ page, level = 0 }) => {
 };
 
 export const Sidebar: React.FC = () => {
+  const { theme, setTheme } = useThemeStore();
+  const [sidebarWidth, setSidebarWidth] = useState(parseInt(localStorage.getItem('sidebarWidth') || '256', 10));
+  const [isResizing, setIsResizing] = useState(false);
+  const [showTrash, setShowTrash] = useState(false);
+  const { restorePage, permanentlyDeletePage } = useWorkspaceStore();
+
   const { pages, addPage } = useWorkspaceStore();
+  const deletedPages = useMemo(() => Object.values(pages).filter(p => p.isDeleted).sort((a,b) => b.updatedAt - a.updatedAt), [pages]);
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
   const rootPages = useMemo(() => {
     return Object.values(pages)
-      .filter((p) => p.parentId === null)
+      .filter((p) => p.parentId === null && !p.isDeleted)
       .sort((a, b) => a.createdAt - b.createdAt);
   }, [pages]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+
+      let newWidth = e.clientX;
+      if (newWidth < 200) newWidth = 200;
+      if (newWidth > 480) newWidth = 480;
+
+      setSidebarWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      if (isResizing) {
+        setIsResizing(false);
+        localStorage.setItem('sidebarWidth', sidebarWidth.toString());
+      }
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, sidebarWidth]);
+
+  const cycleTheme = () => {
+    if (theme === 'system') setTheme('light');
+    else if (theme === 'light') setTheme('dark');
+    else setTheme('system');
+  };
+
+  const ThemeIcon = theme === 'system' ? Monitor : theme === 'dark' ? Moon : Sun;
 
   const handleCreateRootPage = () => {
     const id = addPage(null);
@@ -140,7 +184,9 @@ export const Sidebar: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-64 md:w-64 flex-shrink-0 border-r border-gray-200 dark:border-neutral-800 bg-[#f7f7f5] dark:bg-[#202020] flex flex-col transition-all duration-300 group/sidebar">
+    <div
+    style={{ width: `${sidebarWidth}px` }}
+    className="relative h-screen flex-shrink-0 border-r border-gray-200 dark:border-neutral-800 bg-[#f7f7f5] dark:bg-[#202020] flex flex-col transition-all duration-300 group/sidebar">
       {/* Workspace Header */}
       <div className="p-3 hover:bg-gray-200 dark:hover:bg-neutral-800 cursor-pointer flex items-center justify-between transition-colors">
         <div className="flex items-center space-x-2 font-semibold text-sm truncate dark:text-gray-200">
@@ -157,7 +203,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Utilities */}
       <div className="flex flex-col mt-2 mb-4 space-y-0.5">
-        <div className="px-3 py-1 flex items-center text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-neutral-800 cursor-pointer">
+        <div onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))} className="px-3 py-1 flex items-center text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-neutral-800 cursor-pointer">
           <Search size={16} className="mr-2" />
           <span>Search</span>
         </div>
@@ -165,7 +211,17 @@ export const Sidebar: React.FC = () => {
           <Settings size={16} className="mr-2" />
           <span>Settings & members</span>
         </div>
-      </div>
+
+        <div onClick={cycleTheme} className="px-3 py-1 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-neutral-800 cursor-pointer">
+          <div className="flex items-center">
+            <ThemeIcon size={16} className="mr-2" />
+            <span>Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+          </div>
+        </div>
+        <div onClick={() => setShowTrash(true)} className="px-3 py-1 flex items-center text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-neutral-800 cursor-pointer">
+          <Trash2 size={16} className="mr-2" />
+          <span>Trash</span>
+        </div></div>
 
       {/* Pages Tree */}
       <div className="flex-grow overflow-y-auto overflow-x-hidden">
@@ -191,6 +247,44 @@ export const Sidebar: React.FC = () => {
         <Plus size={16} className="mr-2" />
         <span>New page</span>
       </div>
-    </div>
+
+      {/* Resizer Handle */}
+      <div
+        className="absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-gray-300 dark:hover:bg-neutral-600 transition-colors z-50"
+        onMouseDown={() => setIsResizing(true)}
+      />
+
+      {/* Trash Modal */}
+      {showTrash && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#202020] w-full max-w-md rounded-lg shadow-xl border dark:border-neutral-800 flex flex-col max-h-[80vh]">
+            <div className="p-4 border-b dark:border-neutral-800 flex justify-between items-center">
+              <h2 className="font-semibold dark:text-white flex items-center"><Trash2 size={18} className="mr-2" /> Trash</h2>
+              <button onClick={() => setShowTrash(false)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                &times;
+              </button>
+            </div>
+            <div className="p-2 overflow-y-auto flex-grow">
+              {deletedPages.length === 0 ? (
+                <div className="p-4 text-center text-gray-500 text-sm">Trash is empty</div>
+              ) : (
+                deletedPages.map(p => (
+                  <div key={p.id} className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded group">
+                    <div className="flex items-center text-sm dark:text-gray-300 truncate mr-2">
+                      <span className="mr-2">{p.icon || <FileText size={16} />}</span>
+                      <span className="truncate">{p.title || 'Untitled'}</span>
+                    </div>
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                      <button onClick={() => restorePage(p.id)} className="px-2 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded text-xs dark:text-gray-200">Restore</button>
+                      <button onClick={() => permanentlyDeletePage(p.id)} className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400 rounded text-xs">Delete</button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+</div>
   );
 };

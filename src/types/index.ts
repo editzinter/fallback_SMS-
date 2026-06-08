@@ -11,6 +11,7 @@ export interface PageMeta {
   createdAt: number;
   updatedAt: number;
   isDatabase?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface PageContent {

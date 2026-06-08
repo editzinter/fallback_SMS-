@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { Editor } from '../components/Editor';
 import { Database } from '../components/Database';
+import { SearchModal } from '../components/SearchModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useWorkspaceStore } from '../store/useStore';
 import { MoreHorizontal, Database as DatabaseIcon, FileText } from 'lucide-react';
@@ -11,8 +12,21 @@ export const Workspace: React.FC = () => {
   const navigate = useNavigate();
   const { pages, activePageId, setActivePage, addPage, updatePageMeta } = useWorkspaceStore();
   const [mounted, setMounted] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowSearch(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -47,6 +61,7 @@ export const Workspace: React.FC = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-white dark:bg-[#191919] font-sans">
       <Sidebar />
+      <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
 
       <main className="flex-1 flex flex-col min-w-0 relative">
         {/* Top Navigation Bar */}

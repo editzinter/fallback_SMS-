@@ -16,6 +16,7 @@ export const Database: React.FC<DatabaseProps> = ({ pageId }) => {
     if (!db) {
       createDatabase(pageId);
     } else if (!activeViewId && db.views.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveViewId(db.views[0].id);
     }
   }, [pageId, db, createDatabase, activeViewId]);

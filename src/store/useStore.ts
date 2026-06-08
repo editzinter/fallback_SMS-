@@ -29,6 +29,8 @@ interface WorkspaceState {
   addPage: (parentId: PageId | null, title?: string, isDatabase?: boolean) => PageId;
   updatePageMeta: (id: PageId, updates: Partial<PageMeta>) => void;
   deletePage: (id: PageId) => void;
+  restorePage: (id: PageId) => void;
+  permanentlyDeletePage: (id: PageId) => void;
   setActivePage: (id: PageId | null) => void;
 }
 
@@ -75,7 +77,63 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set((state) => {
           const newPages = { ...state.pages };
 
-          const deleteChildren = (parentId: PageId) => {
+          const markDeleted = (pageId) => {
+            if (newPages[pageId]) {
+              newPages[pageId] = { ...newPages[pageId], isDeleted: true, updatedAt: Date.now() };
+            }
+            Object.values(newPages).forEach((p) => {
+              if (p.parentId === pageId) {
+                markDeleted(p.id);
+              }
+            });
+          };
+
+          markDeleted(id);
+
+          return {
+            pages: newPages,
+            activePageId: state.activePageId === id ? null : state.activePageId
+          };
+        });
+      },
+
+      restorePage: (id) => {
+        set((state) => {
+          const newPages = { ...state.pages };
+
+          const markRestored = (pageId) => {
+            if (newPages[pageId]) {
+              newPages[pageId] = { ...newPages[pageId], isDeleted: false, updatedAt: Date.now() };
+            }
+            Object.values(newPages).forEach((p) => {
+              if (p.parentId === pageId) {
+                markRestored(p.id);
+              }
+            });
+          };
+
+          markRestored(id);
+
+          // Also restore parent if it was deleted
+          let currentId = newPages[id]?.parentId;
+          while (currentId) {
+            if (newPages[currentId]) {
+              newPages[currentId] = { ...newPages[currentId], isDeleted: false, updatedAt: Date.now() };
+              currentId = newPages[currentId].parentId;
+            } else {
+              break;
+            }
+          }
+
+          return { pages: newPages };
+        });
+      },
+
+      permanentlyDeletePage: (id) => {
+        set((state) => {
+          const newPages = { ...state.pages };
+
+          const deleteChildren = (parentId) => {
             Object.values(newPages).forEach((p) => {
               if (p.parentId === parentId) {
                 delete newPages[p.id];
@@ -116,6 +174,27 @@ export const useContentStore = create<{
     }),
     {
       name: 'content-storage',
+      storage: createJSONStorage(() => storage),
+    }
+  )
+);
+
+
+type Theme = 'light' | 'dark' | 'system';
+
+interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}
+
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      theme: 'system',
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: 'theme-storage',
       storage: createJSONStorage(() => storage),
     }
   )

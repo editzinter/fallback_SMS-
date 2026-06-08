@@ -22,7 +22,14 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showCoverPicker, setShowCoverPicker] = useState(false);
   const [coverSearch, setCoverSearch] = useState("");
+
+  const [isApplyingCover, setIsApplyingCover] = useState(false);
+
   const { theme } = useThemeStore();
+
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -70,12 +77,21 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
     setShowCoverPicker(!showCoverPicker);
   };
 
+
   const handleApplyCover = (e: React.FormEvent) => {
     e.preventDefault();
     if (!coverSearch) return;
-    const coverUrl = `https://source.unsplash.com/1200x400/?${encodeURIComponent(coverSearch)}`;
-    updatePageMeta(pageId, { coverImage: coverUrl });
-    setShowCoverPicker(false);
+    setIsApplyingCover(true);
+
+    // Simulate image loading delay
+    setTimeout(() => {
+      updatePageMeta(pageId, {
+        coverImage: `https://source.unsplash.com/1200x400/?${encodeURIComponent(coverSearch)}`
+      });
+      setShowCoverPicker(false);
+      setCoverSearch("");
+      setIsApplyingCover(false);
+    }, 600);
   };
 
   const handleRemoveCover = () => {
@@ -97,7 +113,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             <div className="relative">
               <button
                 onClick={() => setShowCoverPicker(!showCoverPicker)}
-                className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded flex items-center shadow-sm transition-colors"
+                className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded flex items-center shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
               >
                 Change cover
               </button>
@@ -111,14 +127,16 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
                       onChange={(e) => setCoverSearch(e.target.value)}
                       className="w-full text-sm p-2 bg-gray-100 dark:bg-neutral-800 rounded outline-none border-none mb-2 text-black dark:text-white"
                     />
-                    <button type="submit" className="w-full bg-blue-500 text-white rounded p-1.5 text-sm hover:bg-blue-600">Apply</button>
+                    <button type="submit" disabled={isApplyingCover} className={`w-full bg-blue-500 text-white rounded p-1.5 text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]`}>
+                      {isApplyingCover ? <><svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Applying...</> : "Apply"}
+                    </button>
                   </form>
                 </div>
               )}
             </div>
             <button
               onClick={handleRemoveCover}
-              className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded shadow-sm transition-colors"
+              className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
             >
               Remove
             </button>
@@ -127,6 +145,16 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
       ) : null}
 
       <div className="max-w-[900px] w-full mx-auto px-12 md:px-24 flex-grow flex flex-col pb-24 relative">
+
+      <div className="absolute top-4 right-4 flex items-center space-x-2 text-sm text-notion-gray dark:text-notion-gray z-50">
+        {saveStatus === 'saving' && (
+           <span className="flex items-center"><svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-notion-gray" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...</span>
+        )}
+        {saveStatus === 'saved' && (
+           <span className="flex items-center text-green-600 dark:text-green-500"><svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg> Saved</span>
+        )}
+      </div>
+
         {/* Absolute positioning for icon when cover exists */}
         {page.icon && page.coverImage && (
           <div className="relative group/icon -mt-[39px] mb-2 z-10 w-[78px]">
@@ -140,8 +168,8 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
               </div>
             )}
             <div className="absolute -top-8 left-0 opacity-0 group-hover/icon:opacity-100 flex space-x-2 bg-white dark:bg-[#202020] shadow-sm border border-notion-border dark:border-notion-borderDark rounded p-1 z-10 text-xs">
-              <button onClick={handleAddIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark">Change</button>
-              <button onClick={handleRemoveIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark">Remove</button>
+              <button onClick={handleAddIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Change</button>
+              <button onClick={handleRemoveIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Remove</button>
             </div>
           </div>
         )}
@@ -159,8 +187,8 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
               </div>
             )}
             <div className="absolute top-10 left-24 opacity-0 group-hover/icon:opacity-100 flex space-x-2 bg-white dark:bg-[#202020] shadow-sm border border-notion-border dark:border-notion-borderDark rounded p-1 z-10 text-xs">
-              <button onClick={handleAddIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark">Change</button>
-              <button onClick={handleRemoveIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark">Remove</button>
+              <button onClick={handleAddIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Change</button>
+              <button onClick={handleRemoveIcon} className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Remove</button>
             </div>
           </div>
         )}
@@ -168,7 +196,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
         <div className={`group/meta flex space-x-4 mb-2 text-sm text-notion-gray dark:text-notion-grayDark opacity-0 hover:opacity-100 transition-opacity min-h-[28px] ${!page.icon && !page.coverImage ? 'pt-[10vh]' : 'mt-4'}`}>
           {!page.icon && (
             <div className="relative">
-              <button onClick={handleAddIcon} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-colors">
+              <button onClick={handleAddIcon} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
                 <Smile size={16} className="mr-1.5" /> Add icon
               </button>
               {!page.icon && showEmojiPicker && (
@@ -182,7 +210,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             </div>
           )}
           {!page.coverImage && (
-            <button onClick={handleAddCover} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-colors">
+            <button onClick={handleAddCover} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
               <ImageIcon size={16} className="mr-1.5" /> Add cover
             </button>
           )}
@@ -203,7 +231,19 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             editor={editor}
             theme={theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark" : "light"}
             onChange={() => {
+              setSaveStatus('saving');
               savePageContent(pageId, editor.document);
+
+              if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+              }
+
+              saveTimeoutRef.current = setTimeout(() => {
+                setSaveStatus('saved');
+                saveTimeoutRef.current = setTimeout(() => {
+                  setSaveStatus('idle');
+                }, 2000);
+              }, 500);
             }}
           />
         </div>

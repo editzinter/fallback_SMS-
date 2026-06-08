@@ -34,7 +34,7 @@ export const Database: React.FC<DatabaseProps> = ({ pageId }) => {
             key={view.id}
             onClick={() => setActiveViewId(view.id)}
             className={cn(
-              "px-3 py-1.5 text-sm flex items-center transition-colors",
+              "px-3 py-1.5 text-sm flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]",
               activeViewId === view.id
                 ? "border-b-2 border-black dark:border-white text-black dark:text-white font-medium"
                 : "text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-t-sm"
@@ -44,7 +44,7 @@ export const Database: React.FC<DatabaseProps> = ({ pageId }) => {
             {view.name}
           </button>
         ))}
-        <button className="px-2 py-1.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm ml-1">
+        <button className="px-2 py-1.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-sm ml-1 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
           <Plus size={16} />
         </button>
       </div>
@@ -93,7 +93,7 @@ const TableView = ({ db, addEntry, updateEntry }: any) => {
           {/* New Row Button */}
           <tr>
             <td colSpan={db.properties.length + 1} className="p-0">
-              <button onClick={addEntry} className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-neutral-800 flex items-center">
+              <button onClick={addEntry} className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-neutral-800 flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
                 <Plus size={16} className="mr-2" /> New
               </button>
             </td>
@@ -163,7 +163,7 @@ const BoardView = ({ db, addEntry, updateEntry }: any) => {
                      updateEntry(id, groupProperty.id, col.name);
                   }
                 }}
-                className="text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 p-2 rounded flex items-center text-sm"
+                className="text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 p-2 rounded flex items-center text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
               >
                 <Plus size={16} className="mr-2" /> New
               </button>

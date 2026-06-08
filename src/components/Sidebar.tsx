@@ -84,10 +84,10 @@ const PageItem: React.FC<PageItemProps> = ({ page, level = 0 }) => {
           "flex items-center opacity-0 transition-opacity",
           isHovered && "opacity-100"
         )}>
-          <button onClick={handleDelete} className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm mr-0.5" title="Delete">
+          <button onClick={handleDelete} className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 rounded-sm mr-0.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]" title="Delete">
             <Trash2 size={14} className="text-notion-gray" />
           </button>
-          <button onClick={handleAddChild} className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm" title="Add sub-page">
+          <button onClick={handleAddChild} className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]" title="Add sub-page">
             <Plus size={14} className="text-notion-gray" />
           </button>
         </div>
@@ -176,7 +176,7 @@ export const Sidebar: React.FC = () => {
   if (collapsed) {
     return (
       <div className="h-screen w-0 md:w-12 border-r border-notion-border dark:border-notion-borderDark bg-gray-50 dark:bg-notion-sidebarDark flex flex-col items-center py-4 transition-all duration-300">
-        <button onClick={() => setCollapsed(false)} className="p-2 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-md mb-4">
+        <button onClick={() => setCollapsed(false)} className="p-2 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-md mb-4 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
           <Menu size={20} className="text-notion-gray" />
         </button>
       </div>
@@ -195,7 +195,7 @@ export const Sidebar: React.FC = () => {
         </div>
         <button
           onClick={() => setCollapsed(true)}
-          className="opacity-0 group-hover/sidebar:opacity-100 p-1 hover:bg-gray-300 dark:hover:bg-notion-hoverDark rounded-sm"
+          className="opacity-0 group-hover/sidebar:opacity-100 p-1 hover:bg-gray-300 dark:hover:bg-notion-hoverDark rounded-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
         >
           <ChevronRight size={16} className="text-notion-gray rotate-180" />
         </button>
@@ -227,7 +227,7 @@ export const Sidebar: React.FC = () => {
       <div className="flex-grow overflow-y-auto overflow-x-hidden">
         <div className="px-3 py-1 text-xs font-semibold text-notion-gray flex justify-between group">
           <span>Private</span>
-          <button onClick={handleCreateRootPage} className="opacity-0 group-hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm p-0.5">
+          <button onClick={handleCreateRootPage} className="opacity-0 group-hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm p-0.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
             <Plus size={14} />
           </button>
         </div>
@@ -260,7 +260,7 @@ export const Sidebar: React.FC = () => {
           <div className="bg-white dark:bg-notion-sidebarDark w-full max-w-md rounded-lg shadow-xl border dark:border-notion-borderDark flex flex-col max-h-[80vh]">
             <div className="p-4 border-b dark:border-notion-borderDark flex justify-between items-center">
               <h2 className="font-semibold dark:text-white flex items-center"><Trash2 size={18} className="mr-2" /> Trash</h2>
-              <button onClick={() => setShowTrash(false)} className="text-notion-gray hover:text-gray-700 dark:hover:text-gray-300">
+              <button onClick={() => setShowTrash(false)} className="text-notion-gray hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
                 &times;
               </button>
             </div>
@@ -275,8 +275,8 @@ export const Sidebar: React.FC = () => {
                       <span className="truncate">{p.title || 'Untitled'}</span>
                     </div>
                     <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-                      <button onClick={() => restorePage(p.id)} className="px-2 py-1 bg-notion-hover hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded text-xs dark:text-gray-200">Restore</button>
-                      <button onClick={() => permanentlyDeletePage(p.id)} className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400 rounded text-xs">Delete</button>
+                      <button onClick={() => restorePage(p.id)} className="px-2 py-1 bg-notion-hover hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded text-xs dark:text-gray-200 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Restore</button>
+                      <button onClick={() => permanentlyDeletePage(p.id)} className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400 rounded text-xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">Delete</button>
                     </div>
                   </div>
                 ))

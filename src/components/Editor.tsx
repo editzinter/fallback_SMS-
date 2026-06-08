@@ -113,7 +113,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             <div className="relative">
               <button
                 onClick={() => setShowCoverPicker(!showCoverPicker)}
-                className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded flex items-center shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
+                className="px-3 py-1 bg-white dark:bg-notion-bgDark hover:bg-notion-hover dark:hover:bg-notion-hoverDark text-notion-text dark:text-notion-textDark opacity-90 text-sm rounded flex items-center shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
               >
                 Change cover
               </button>
@@ -136,7 +136,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             </div>
             <button
               onClick={handleRemoveCover}
-              className="px-3 py-1 bg-white dark:bg-[#202020] hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-700 dark:text-gray-200 text-sm rounded shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
+              className="px-3 py-1 bg-white dark:bg-notion-bgDark hover:bg-notion-hover dark:hover:bg-notion-hoverDark text-notion-text dark:text-notion-textDark opacity-90 text-sm rounded shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]"
             >
               Remove
             </button>
@@ -144,7 +144,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
         </div>
       ) : null}
 
-      <div className="max-w-[900px] w-full mx-auto px-12 md:px-24 flex-grow flex flex-col pb-24 relative">
+      <div className="max-w-[900px] w-full mx-auto px-12 md:px-24 flex-grow flex flex-col pb-24 relative pt-4">
 
       <div className="absolute top-4 right-4 flex items-center space-x-2 text-sm text-notion-gray dark:text-notion-gray z-50">
         {saveStatus === 'saving' && (
@@ -193,10 +193,10 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
           </div>
         )}
 
-        <div className={`group/meta flex space-x-4 mb-2 text-sm text-notion-gray dark:text-notion-grayDark opacity-0 hover:opacity-100 transition-opacity min-h-[28px] ${!page.icon && !page.coverImage ? 'pt-[10vh]' : 'mt-4'}`}>
+        <div className={`group/meta flex space-x-4 mb-2 text-sm text-notion-text dark:text-notion-textDark opacity-0 hover:opacity-100 transition-opacity min-h-[28px] ${!page.icon && !page.coverImage ? 'pt-[10vh]' : 'mt-4'}`}>
           {!page.icon && (
             <div className="relative">
-              <button onClick={handleAddIcon} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
+              <button onClick={handleAddIcon} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 px-2 py-1 rounded flex items-center transition-all duration-100">
                 <Smile size={16} className="mr-1.5" /> Add icon
               </button>
               {!page.icon && showEmojiPicker && (
@@ -210,7 +210,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
             </div>
           )}
           {!page.coverImage && (
-            <button onClick={handleAddCover} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark px-2 py-1 rounded flex items-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
+            <button onClick={handleAddCover} className="hover:bg-notion-hover dark:hover:bg-notion-hoverDark text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 px-2 py-1 rounded flex items-center transition-all duration-100">
               <ImageIcon size={16} className="mr-1.5" /> Add cover
             </button>
           )}
@@ -223,7 +223,7 @@ export const Editor: React.FC<EditorProps> = ({ pageId }) => {
           onBlur={handleTitleBlur}
           onKeyDown={handleTitleKeyDown}
           placeholder="Untitled"
-          className="text-[40px] leading-[1.2] font-bold bg-transparent border-none outline-none mb-6 placeholder-notion-border dark:placeholder-notion-borderDark resize-none w-full text-notion-text dark:text-notion-textDark"
+          className="text-[40px] leading-[1.2] font-bold bg-transparent border-none outline-none mb-6 -ml-[2px] placeholder-notion-border dark:placeholder-notion-borderDark/40 resize-none w-full text-notion-text dark:text-notion-textDark"
         />
 
         <div className="-ml-12">

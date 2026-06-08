@@ -65,8 +65,8 @@ export const Workspace: React.FC = () => {
 
       <main className="flex-1 flex flex-col min-w-0 relative">
         {/* Top Navigation Bar */}
-        <div className="h-12 flex items-center justify-between px-3 md:px-4 shrink-0 absolute top-0 left-0 right-0 z-10">
-          <div className="flex items-center space-x-2 text-sm text-notion-gray dark:text-notion-grayDark overflow-hidden">
+        <div className="h-[45px] flex items-center justify-between px-3 md:px-4 shrink-0 sticky top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#191919]/80 backdrop-blur-sm">
+          <div className="flex items-center space-x-2 text-sm text-notion-text dark:text-notion-textDark overflow-hidden opacity-80">
             {currentPage && (
               <div className="flex items-center bg-transparent backdrop-blur-md px-2 py-1 rounded cursor-pointer hover:bg-notion-hover dark:hover:bg-notion-hoverDark transition-colors">
                 <span className="truncate max-w-[200px] flex items-center gap-1.5 font-medium">
@@ -80,15 +80,15 @@ export const Workspace: React.FC = () => {
             <div className="flex items-center space-x-1 bg-transparent backdrop-blur-md rounded px-1">
               <button
                 onClick={togglePageType}
-                className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark flex items-center text-sm transition-colors"
+                className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 flex items-center text-sm transition-colors"
                 title={currentPage.isDatabase ? "Switch to Document" : "Switch to Database"}
               >
                 {currentPage.isDatabase ? <FileText size={16} /> : <DatabaseIcon size={16} />}
               </button>
-              <button className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark transition-colors text-sm">
+              <button className="px-2 py-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 transition-colors text-sm">
                 Share
               </button>
-              <button className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-gray dark:text-notion-grayDark transition-colors">
+              <button className="p-1 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 transition-colors">
                 <MoreHorizontal size={20} />
               </button>
             </div>
@@ -99,13 +99,13 @@ export const Workspace: React.FC = () => {
         <div className="flex-1 overflow-y-auto">
           {currentPage ? (
             currentPage.isDatabase ? (
-              <div className="h-full flex flex-col pt-12 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+              <div className="h-full flex flex-col pt-4 px-12 md:px-24 max-w-[900px] mx-auto w-full">
                 <input
                   type="text"
                   value={currentPage.title}
                   onChange={(e) => updatePageMeta(currentPage.id, { title: e.target.value })}
                   placeholder="Untitled Database"
-                  className="text-4xl font-bold bg-transparent border-none outline-none mt-12 mb-4 placeholder-gray-300 dark:placeholder-neutral-700 resize-none w-full text-gray-900 dark:text-white"
+                  className="text-[40px] font-bold bg-transparent border-none outline-none mt-12 mb-4 placeholder-notion-border dark:placeholder-notion-borderDark resize-none w-full text-notion-text dark:text-notion-textDark"
                 />
                 <Database pageId={currentPage.id} />
               </div>

@@ -12,15 +12,17 @@ export default {
           bg: '#ffffff',
           bgDark: '#191919',
           text: '#37352f',
-          textDark: '#ffffff',
+          textDark: 'rgba(255, 255, 255, 0.9)',
           gray: 'rgba(55, 53, 47, 0.65)',
           grayDark: 'rgba(255, 255, 255, 0.5)',
           hover: 'rgba(55, 53, 47, 0.08)',
-          hoverDark: 'rgba(255, 255, 255, 0.055)',
-          border: 'rgba(55, 53, 47, 0.09)',
-          borderDark: 'rgba(255, 255, 255, 0.09)',
+          hoverDark: 'rgba(255, 255, 255, 0.08)',
+          border: 'rgba(55, 53, 47, 0.16)',
+          borderDark: 'rgba(255, 255, 255, 0.14)',
           sidebar: '#f7f7f5',
           sidebarDark: '#202020',
+          blue: 'rgba(35, 131, 226, 0.28)',
+          blueDark: 'rgba(35, 131, 226, 0.4)',
         }
       },
       fontFamily: {
@@ -40,6 +42,8 @@ export default {
       boxShadow: {
         'notion-dropdown': 'rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px',
         'notion-dropdown-dark': 'rgba(255, 255, 255, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.4) 0px 3px 6px, rgba(0, 0, 0, 0.6) 0px 9px 24px',
+        'notion-card': '0 0 0 1px rgba(15, 15, 15, 0.1), 0 2px 4px rgba(15, 15, 15, 0.1)',
+        'notion-card-dark': '0 0 0 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.5)',
       }
     },
   },

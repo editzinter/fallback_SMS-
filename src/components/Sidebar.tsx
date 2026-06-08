@@ -188,7 +188,7 @@ export const Sidebar: React.FC = () => {
     style={{ width: `${sidebarWidth}px` }}
     className="relative h-screen flex-shrink-0 border-r border-notion-border dark:border-notion-borderDark bg-notion-sidebar dark:bg-notion-sidebarDark flex flex-col transition-all duration-300 group/sidebar">
       {/* Workspace Header */}
-      <div className="p-3 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer flex items-center justify-between transition-colors">
+      <div className="p-3 mb-2 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer flex items-center justify-between transition-colors">
         <div className="flex items-center space-x-2 font-semibold text-sm truncate dark:text-gray-200">
           <div className="w-5 h-5 bg-black dark:bg-white text-white dark:text-black rounded flex items-center justify-center text-xs">J</div>
           <span className="truncate">Jules's Workspace</span>
@@ -203,29 +203,29 @@ export const Sidebar: React.FC = () => {
 
       {/* Utilities */}
       <div className="flex flex-col mt-2 mb-4 space-y-0.5">
-        <div onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))} className="px-3 py-1 flex items-center text-sm text-notion-gray dark:text-notion-gray hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer">
+        <div onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))} className="px-3 py-1.5 flex items-center text-sm text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer transition-colors duration-100">
           <Search size={16} className="mr-2" />
           <span>Search</span>
         </div>
-        <div className="px-3 py-1 flex items-center text-sm text-notion-gray dark:text-notion-gray hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer">
+        <div className="px-3 py-1.5 flex items-center text-sm text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer transition-colors duration-100">
           <Settings size={16} className="mr-2" />
           <span>Settings & members</span>
         </div>
 
-        <div onClick={cycleTheme} className="px-3 py-1 flex items-center justify-between text-sm text-notion-gray dark:text-notion-gray hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer">
+        <div onClick={cycleTheme} className="px-3 py-1.5 flex items-center justify-between text-sm text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer transition-colors duration-100">
           <div className="flex items-center">
             <ThemeIcon size={16} className="mr-2" />
             <span>Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
           </div>
         </div>
-        <div onClick={() => setShowTrash(true)} className="px-3 py-1 flex items-center text-sm text-notion-gray dark:text-notion-gray hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer">
+        <div onClick={() => setShowTrash(true)} className="px-3 py-1.5 flex items-center text-sm text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer transition-colors duration-100">
           <Trash2 size={16} className="mr-2" />
           <span>Trash</span>
         </div></div>
 
       {/* Pages Tree */}
       <div className="flex-grow overflow-y-auto overflow-x-hidden">
-        <div className="px-3 py-1 text-xs font-semibold text-notion-gray flex justify-between group">
+        <div className="px-3 py-1 mt-4 text-xs font-semibold text-notion-text dark:text-notion-textDark opacity-60 flex justify-between group">
           <span>Private</span>
           <button onClick={handleCreateRootPage} className="opacity-0 group-hover:opacity-100 hover:bg-notion-hover dark:hover:bg-notion-hoverDark rounded-sm p-0.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-[#191919] active:scale-[0.98]">
             <Plus size={14} />
@@ -241,7 +241,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Create New Page Button at bottom */}
       <div
-        className="mt-auto border-t border-notion-border dark:border-notion-borderDark p-3 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer flex items-center text-sm text-notion-gray dark:text-notion-grayDark transition-colors"
+        className="mt-auto border-t border-notion-border dark:border-notion-borderDark p-3 hover:bg-notion-hover dark:hover:bg-notion-hoverDark cursor-pointer flex items-center text-sm text-notion-text dark:text-notion-textDark opacity-70 hover:opacity-100 transition-colors"
         onClick={handleCreateRootPage}
       >
         <Plus size={16} className="mr-2" />
